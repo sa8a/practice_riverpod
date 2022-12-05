@@ -1,16 +1,20 @@
-# practice_riverpod
+# riverpod
 
-A new Flutter project.
+Flutter 3.3, Riverpod 2.0.0-dev, Dart 2.18対応🤝
 
-## Getting Started
+## 参考
 
-This project is a starting point for a Flutter application.
+- [Flutter x Riverpod でアプリ開発！実践入門](https://zenn.dev/riscait/books/flutter-riverpod-practical-introduction)
+- [flutter_riverpod](https://pub.dev/packages/flutter_riverpod/install)
+- [Riverpod公式ドキュメント](https://riverpod.dev/ja/)
 
-A few resources to get you started if this is your first Flutter project:
+## 各Providerの役割と使い分け
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+|種類|説明|
+|:--|:--|
+|`Provider`|最も基本的なProvider|
+|`StateProvider`|外部から変更可能な状態を提供する|
+|`StateNotifierProvider`|外部から変更可能な状態と、状態操作メソッドクラスを提供する|
+|`FutureProvider`|非同期で取得した値を提供する|
+|`StreamProvider`|断続的に最新の値を提供する|
+|`ChangeNotifierProvider`|変更可能な状態を持つクラスを提供する|
