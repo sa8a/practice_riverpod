@@ -6,18 +6,22 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// Providerの定数をグローバルに宣言しましょう。
-// このProviderの値の型は推論されてString型となります。
-// 型を明示する場合： `Provider<String>((ref) => '');`
-final appNameProvider = Provider((ref) => 'My TODO');
+// 外部から変更可能なStateProviderを例に用います。
+final counterProvider = StateProvider((ref) => 10);
+// カウンターの値を2倍にした値を提供するProvider
+final doubleCounterProvider = Provider((ref) {
+  final count = ref.watch(counterProvider);
+  return count * 2;
+});
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Providerを監視し値を取得するには `watch` を使います。
-    final appName = ref.watch(appNameProvider);
+    // doubleCounterProvider を読み取る。
+    // counterProvider の状態が更新されると doubleCounterProvider も変更され、再構築される。
+    final doubleCount = ref.watch(doubleCounterProvider);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -25,11 +29,9 @@ class MyApp extends ConsumerWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        // Providerの値を使用して文字列を表示しています。
-        appBar: AppBar(title: Text(appName)),
-        body: ListView(
-          children: const [],
-        ),
+        appBar: AppBar(title: const Text('')),
+        // doubleCounterProvider の値を表示
+        body: Text('2倍されたカウント値：$doubleCount'),
       ),
     );
   }
