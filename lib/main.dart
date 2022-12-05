@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('StateNotifierProvider example'),
+          title: const Text('ToDo App'),
           actions: [
             // ボタンを押して新しいTodoを追加できる（実際はTodoのタイトル等を入力できるようにすると良い）
             IconButton(onPressed: addTodo, icon: const Icon(Icons.add))
@@ -44,7 +44,13 @@ class MyApp extends ConsumerWidget {
             final todo = todoList[index];
             return ListTile(
               // TodoのタイトルをTextで表示
-              title: Text('${todo.title}${todo.id}'),
+              title: Text(
+                '${todo.title}${todo.id}',
+                style: TextStyle(
+                  decoration:
+                      todo.completed ? TextDecoration.lineThrough : null,
+                ),
+              ),
               leading: Icon(
                 todo.completed
                     ? Icons.check_box
@@ -52,7 +58,18 @@ class MyApp extends ConsumerWidget {
               ),
               trailing: TextButton(
                 onPressed: () => notifier.remove(todo.id),
-                child: const Text('Delete'),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    '削除',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
               // タップでTODOの完了状態を切り替える
               onTap: () => notifier.toggle(todo.id),
