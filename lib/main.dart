@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
@@ -8,10 +6,12 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-final configProvider = FutureProvider<Map<String, Object?>>((ref) async {
-  final jsonString = await rootBundle.loadString('assets/config.json');
-  final content = json.decode(jsonString) as Map<String, Object?>;
-  return content;
+// 外部から変更可能なStateProviderを例に用います。
+final counterProvider = StateProvider((ref) => 10);
+// カウンターの値を2倍にした値を提供するProvider
+final doubleCounterProvider = Provider((ref) {
+  final count = ref.watch(counterProvider);
+  return count * 2;
 });
 
 class MyApp extends ConsumerWidget {
@@ -19,35 +19,19 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // FutureProviderを読み取る（取得できる型は `AsyncValue<T>`）
-    final config = ref.watch(configProvider);
+    // doubleCounterProvider を読み取る。
+    // counterProvider の状態が更新されると doubleCounterProvider も変更され、再構築される。
+    final doubleCount = ref.watch(doubleCounterProvider);
 
     return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('App'),
-        ),
-        // AsyncValue は `.when` を使ってハンドリングする
-        body: config.when(
-          // 非同期処理中は `loading` で指定したWidgetが表示される
-          loading: () => const CircularProgressIndicator(),
-          // エラーが発生した場合に表示されるWidgetを指定
-          error: (error, stack) => Text('Error: $error'),
-          // 非同期処理が完了すると、取得した `config` が `data` で使用できる
-          data: (config) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(config['appName'].toString()),
-                  Text(config['isDebug'].toString()),
-                  Text(config['defaultAge'].toString()),
-                  Text(config['defaultGenders'].toString()),
-                ],
-              ),
-            );
-          },
-        ),
+        appBar: AppBar(title: const Text('')),
+        // doubleCounterProvider の値を表示
+        body: Text('2倍されたカウント値：$doubleCount'),
       ),
     );
   }
