@@ -35,7 +35,17 @@ class MyApp extends ConsumerWidget {
           error: (error, stack) => Text('Error: $error'),
           // 非同期処理が完了すると、取得した `config` が `data` で使用できる
           data: (config) {
-            return Text(config['host'].toString());
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(config['appName'].toString()),
+                  Text(config['isDebug'].toString()),
+                  Text(config['defaultAge'].toString()),
+                  Text(config['defaultGenders'].toString()),
+                ],
+              ),
+            );
           },
         ),
       ),
