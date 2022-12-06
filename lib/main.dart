@@ -6,33 +6,29 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// 外部から変更可能なStateProviderを例に用います。
-final counterProvider = StateProvider((ref) => 10);
-// カウンターの値を2倍にした値を提供するProvider
-final doubleCounterProvider = Provider((ref) {
-  final count = ref.watch(counterProvider);
-  return count * 2;
-});
+// Providerの定数をグローバルに宣言
+final counterProvider = StateProvider(((ref) => 0));
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // doubleCounterProvider を読み取る。
-    // counterProvider の状態が更新されると doubleCounterProvider も変更され、再構築される。
-    final doubleCount = ref.watch(doubleCounterProvider);
+    // Providerを読み取る
+    // `.notifier`をつけると`StateController`が、
+    // つけなければ、`state` つまり int が取得できる
+    final counter = ref.watch(counterProvider.notifier);
 
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: Scaffold(
-        appBar: AppBar(title: const Text('')),
-        // doubleCounterProvider の値を表示
-        body: Text('2倍されたカウント値：$doubleCount'),
-      ),
+          body: Center(
+        child: ElevatedButton(
+          onPressed: () => counter.update((state) => state + 1),
+
+          // counterProviderの状態をTextで表示。値が変わると再描画。
+          child: Text('Count: ${ref.watch(counterProvider)}'),
+        ),
+      )),
     );
   }
 }
