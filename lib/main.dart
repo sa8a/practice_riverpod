@@ -27,6 +27,10 @@ class MyApp extends ConsumerWidget {
         completed: false,
       );
       notifier.add(newTodo);
+      print(todoList);
+      print(todoList[1].id);
+      print(todoList[1].title);
+      print(todoList[1].completed);
     }
 
     return MaterialApp(
