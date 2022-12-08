@@ -58,19 +58,13 @@ class MyApp extends ConsumerWidget {
 
 ``` dart
 class MyApp extends ConsumerStatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  MyAppState createState() => MyAppState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
 }
 
-class MyAppState extends ConsumerState<MyApp> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
